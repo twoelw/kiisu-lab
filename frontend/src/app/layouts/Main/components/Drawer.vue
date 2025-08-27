@@ -133,10 +133,10 @@ const showHomeMenu = () => {
 
 const linksList = [
   {
-    title: 'My Flipper',
+    title: 'My Kiisu',
     icon: 'flipper:device',
     name: 'Device',
-    titleOverride: computed(() => flipperStore.flipperName || 'My Flipper')
+    titleOverride: computed(() => flipperStore.flipperName || 'My Kiisu')
   },
   {
     title: 'Apps',

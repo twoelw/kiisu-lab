@@ -7,7 +7,7 @@
     "theme_color": "#ff8200",
     "lang": "en",
     "orientation": "any",
-    "description": "Flipper Zero is a fanatic's portable multi-tool in a toy-like body. This app helps you manage your device data, organize your keys and share it with other Flipper Zero users",
+    "description": "Kiisu is a portable card-sized multi-tool companion. This app helps you manage your device data, organize keys, and share with other Kiisu users",
     "categories": [
         "developer tools",
         "developer",
@@ -68,7 +68,7 @@
             "type": "image/png",
             "sizes": "540x720",
             "form_factor": "narrow",
-            "label": "View informations and update your Flipper Zero"
+            "label": "View information and update your Kiisu"
         },
         {
             "src": "/screenshots/screenshot2.jpg",
@@ -89,7 +89,7 @@
             "type": "image/jpeg",
             "sizes": "1024x593",
             "form_factor": "wide",
-            "label": "View informations and update your Flipper Zero"
+            "label": "View information and update your Kiisu"
         },
         {
             "src": "/screenshots/screenshot5.jpg",
