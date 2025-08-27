@@ -11,6 +11,7 @@
 import { defineConfig } from '#q-app/wrappers'
 
 import path from 'path'
+// no explicit type imports here to avoid mismatches between Vite/Connect typings
 
 import { flipperzeroProtobufUpdate, compileProtofiles } from './configs/hooks'
 
@@ -145,7 +146,85 @@ export default defineConfig((ctx) => {
             }
           },
           { server: false }
-        ]
+        ],
+        // Dev-only proxy to stream GitHub assets and bypass browser CORS
+        ctx.dev && {
+          name: 'github-asset-proxy',
+          configureServer(server) {
+            server.middlewares.use(async (req, res, next) => {
+              try {
+                const reqShape = req as unknown as { url?: string; method?: string }
+                const resShape = res as unknown as {
+                  statusCode: number
+                  setHeader(name: string, value: string): void
+                  end(data?: unknown): void
+                }
+                const url = reqShape.url || ''
+                if (!url.startsWith('/github-asset')) return next()
+                if (reqShape.method && reqShape.method !== 'GET') return next()
+
+                const qIndex = url.indexOf('?')
+                const qs = qIndex >= 0 ? url.slice(qIndex) : ''
+                const urlObj = new URL(qs || '?', 'http://localhost')
+                const raw = urlObj.searchParams.get('url')
+                if (!raw) {
+                  resShape.statusCode = 400
+                  resShape.end('Missing url parameter')
+                  return
+                }
+                const u = new URL(raw)
+                const host = u.hostname
+                const isGithub = host.endsWith('github.com') || host.endsWith('githubusercontent.com')
+                if (!isGithub) {
+                  resShape.statusCode = 400
+                  resShape.end('Forbidden host')
+                  return
+                }
+
+                let currentUrl = raw
+                for (let i = 0; i < 4; i++) {
+                  const r = await fetch(currentUrl, {
+                    method: 'GET',
+                    redirect: 'manual',
+                    headers: {
+                      'User-Agent': 'kiisu-lab-dev-proxy'
+                    }
+                  })
+                  if (r.status >= 300 && r.status < 400) {
+                    const loc = r.headers.get('location')
+                    if (!loc) break
+                    currentUrl = new URL(loc, currentUrl).toString()
+                    continue
+                  }
+                  if (!r.ok) {
+                    resShape.statusCode = r.status
+                    resShape.end('Upstream error')
+                    return
+                  }
+                  const contentType = r.headers.get('content-type') || 'application/octet-stream'
+                  const disp = r.headers.get('content-disposition') || undefined
+                  const buf = Buffer.from(await r.arrayBuffer())
+                  resShape.statusCode = 200
+                  resShape.setHeader('Content-Type', contentType)
+                  if (disp) resShape.setHeader('Content-Disposition', disp)
+                  resShape.setHeader('Content-Length', String(buf.length))
+                  resShape.end(buf)
+                  return
+                }
+                resShape.statusCode = 502
+                resShape.end('Too many redirects')
+              } catch (e) {
+                const msg = e instanceof Error ? e.message : 'unknown'
+                const resShape = res as unknown as {
+                  statusCode: number
+                  end(data?: string): void
+                }
+                resShape.statusCode = 500
+                resShape.end('Proxy error: ' + msg)
+              }
+            })
+          }
+        }
       ]
     },
 
@@ -160,7 +239,9 @@ export default defineConfig((ctx) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+        dark: true
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack

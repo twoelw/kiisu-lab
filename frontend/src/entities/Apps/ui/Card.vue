@@ -1,12 +1,12 @@
 <template>
   <div tabindex="0" class="card cursor-pointer" @click="onClick">
     <div class="card__wrapper">
-      <div class="card__image-wrapper bg-primary q-mb-sm q-pa-xs">
+    <div class="card__image-wrapper bg-black q-mb-sm q-pa-xs">
         <q-img
           class="card__image"
           :src="currentVersion.screenshots[0]"
           :ratio="256 / 128"
-          spinner-color="primary"
+      spinner-color="white"
           spinner-size="82px"
         />
       </div>

@@ -1,6 +1,6 @@
 <template>
   <q-drawer
-    class="menu-link bg-grey-2"
+    :class="['menu-link', $q.dark ? 'bg-dark' : 'bg-grey-2']"
     show-if-above
     :width="175"
     :breakpoint="900"

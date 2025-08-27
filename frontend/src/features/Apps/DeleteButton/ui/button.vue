@@ -48,7 +48,7 @@
           <q-btn
             class="col q-mr-md"
             flat
-            text-color="dark"
+            :text-color="$q.dark ? 'white' : 'dark'"
             label="Cancel"
             v-close-popup
           />

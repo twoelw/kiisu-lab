@@ -20,7 +20,7 @@
       </q-avatar>
     </q-item-section>
     <q-item-section>
-      <q-item-label>My Flippers</q-item-label>
+  <q-item-label>My Kiisus</q-item-label>
     </q-item-section>
   </q-item>
 
@@ -120,7 +120,7 @@
             <q-item-section class="col-7 q-pl-md">
               <div>
                 <div class="text-h6">Waiting for connection...</div>
-                <div class="text-caption">Your Flippers will appear here</div>
+                <div class="text-caption">Your Kiisus will appear here</div>
               </div>
             </q-item-section>
           </q-item>

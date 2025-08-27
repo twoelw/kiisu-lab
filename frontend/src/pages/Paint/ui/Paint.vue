@@ -2,7 +2,7 @@
   <GenericPageLayout
     title="Paint"
     icon="flipper:paint"
-    description="Pixel editor for Flipper, streamed to the device"
+  description="Pixel editor for Kiisu, streamed to the device"
     class="relative-position"
   >
     <div class="column fit">
@@ -35,7 +35,7 @@
     <template #info>
       <h6 class="q-mt-none q-mb-sm">About Paint</h6>
       <p>
-        Draw pixel art or test UI elements right on your Flipper's screen. The
+        Draw pixel art or test UI elements right on your Kiisu's screen. The
         editor is streamed to the device in real-time. Use basic drawing tools,
         upload images and export the Paint canvas to a PNG when you're done.
       </p>
@@ -45,7 +45,7 @@
         is not part of the image and serves as a visual aid.
       </p>
       <p class="q-mb-none">
-        Note that Flipper has to be unlocked to be able to show the image on the
+        Note that Kiisu has to be unlocked to be able to show the image on the
         screen.
       </p>
     </template>

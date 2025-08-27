@@ -24,7 +24,7 @@
   <template v-else>
     <q-btn
       outline
-      color="black"
+      :color="$q.dark ? 'white' : 'black'"
       icon="cable"
       label="Connect"
       :disabled="flipperStore.flags.disableNavigation"

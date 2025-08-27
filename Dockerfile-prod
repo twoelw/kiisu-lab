@@ -16,8 +16,18 @@ FROM flipperdevices/nginx-headers-more-alpine:1.25.1
 
 RUN apk add tzdata
 
+RUN apk add --no-cache jq curl bash
+
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=frontend /app/frontend/dist/spa /usr/share/nginx/html
 
+# Mirror scripts
+COPY scripts /app/scripts
+RUN chmod +x /app/scripts/*.sh
+
+# Mirror env defaults
+ENV MIRROR_REPOS="kiisu-io/kiisu-firmware Next-Flip/Momentum-Firmware noproto/xero-firmware"
+ENV MIRROR_INTERVAL_SECONDS=900
+
 EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]

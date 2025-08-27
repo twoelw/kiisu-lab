@@ -45,6 +45,8 @@
                 <q-chip
                   :class="{ 'no-pointer-events': !getStatusHint.dialog }"
                   :color="getStatusHint.color"
+                  text-color="black"
+                  style="color: black"
                   :icon="getStatusHint.icon"
                   :label="getStatusHint.text"
                   :clickable="!!getStatusHint.dialog"
@@ -138,7 +140,7 @@
                 .screenshots"
               :key="index"
             >
-              <div class="app__image-wrapper bg-primary q-pa-xs q-mx-xs">
+              <div class="app__image-wrapper q-pa-xs q-mx-xs">
                 <q-img
                   class="app__image"
                   :ratio="256 / 128"
@@ -254,7 +256,7 @@
           <q-card-actions align="right">
             <q-btn
               flat
-              text-color="dark"
+              :text-color="$q.dark ? 'white' : 'dark'"
               class="q-mr-md"
               label="Cancel"
               v-close-popup
@@ -458,7 +460,7 @@ const statusHints: StatusHints = {
     tooltip: 'This may take some time, come back later'
   },
   FLIPPER_OUTDATED: {
-    text: 'Flipper firmware is outdated',
+    text: 'Kiisu firmware is outdated',
     icon: 'mdi-alert-circle-outline',
     color: 'deep-orange-2',
     dialog: 'outdatedFirmwareDialog'

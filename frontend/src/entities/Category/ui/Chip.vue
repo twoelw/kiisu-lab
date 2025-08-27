@@ -10,9 +10,9 @@
       v-if="iconUri"
       :name="`img:${iconUri}`"
       size="14px"
-      class="q-my-xs q-mr-sm"
+      class="q-my-xs q-mr-sm text-black"
     />
-    <span class="text-no-wrap">{{ name }}</span>
+    <span class="text-no-wrap text-black">{{ name }}</span>
   </q-chip>
 </template>
 

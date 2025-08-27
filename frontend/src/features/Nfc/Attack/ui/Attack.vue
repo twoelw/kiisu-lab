@@ -1,7 +1,7 @@
 <template>
   <q-card flat>
     <q-card-section class="q-px-none">
-      <h6 class="full-width text-left q-ma-none">Crack nonces on Flipper</h6>
+  <h6 class="full-width text-left q-ma-none">Crack nonces on Kiisu</h6>
     </q-card-section>
     <q-card-section class="q-px-none">
       <div class="q-mb-md">
@@ -98,7 +98,7 @@
     </q-card-section>
     <q-card-section v-else class="row justify-start q-px-none">
       <template v-if="flipperStore.isElectron">
-        <p>Plug in your Flipper and and wait for initialization</p>
+  <p>Plug in your Kiisu and and wait for initialization</p>
       </template>
       <template v-else>
         <FlipperConnectWebBtn />

@@ -1,10 +1,10 @@
 <template>
-  <q-page class="column items-center bg-black q-pa-sm" :style-fn="myTweak">
+  <q-page class="column items-center q-pa-sm" :class="$q.dark ? 'bg-dark' : ''" :style-fn="myTweak">
     <div ref="terminalWrapper" class="fit">
       <div ref="terminalContainer" class="fit" />
 
       <q-btn
-        color="black"
+        :color="$q.dark ? 'white' : 'black'"
         icon="tune"
         class="absolute-top-right q-ma-sm z-top shadow-2 q-mr-lg"
       >
@@ -48,7 +48,7 @@
               <q-item-section>
                 <q-btn
                   dense
-                  color="black"
+                  :color="$q.dark ? 'white' : 'black'"
                   icon="mdi-minus"
                   @click="fontSize--"
                 />
@@ -57,7 +57,7 @@
               <q-item-section>
                 <q-btn
                   dense
-                  color="black"
+                  :color="$q.dark ? 'white' : 'black'"
                   icon="mdi-plus"
                   @click="fontSize++"
                 />

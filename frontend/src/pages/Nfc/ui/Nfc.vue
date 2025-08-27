@@ -16,17 +16,17 @@
         to recover the keys by analyzing the nonces.
       </p>
       <p>
-        Saved nonces are stored in the log file on Flipper's SD card. We are
+        Saved nonces are stored in the log file on Kiisu's SD card. We are
         feeding nonces one by one into mfkey32, looking for new keys. Once
         discovered, new keys will be added to the user dictionary file and will
         be available for future cracks.
       </p>
       <p>You can also run the attack by entering the nonce manually.</p>
       <p class="q-mb-none">
-        <a href="https://docs.flipper.net/nfc/mfkey32" target="_blank"
+  <a href="https://docs.flipper.net/nfc/mfkey32" target="_blank"
           >Read more about mfkey32</a
         >
-        on Flipper Docs
+  on Flipper Docs
       </p>
     </template>
   </GenericPageLayout>

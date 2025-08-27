@@ -25,7 +25,7 @@ withDefaults(defineProps<Props>(), {
         <q-icon name="mdi-alert-circle" color="negative" size="64px" />
         <div class="text-h6 q-my-sm">Outdated Firmware Version</div>
         <p>
-          Firmware version on your Flipper does not support this app.<br />Click
+          Firmware version on your Kiisu does not support this app.<br />Click
           the button below to update your device.
         </p>
       </q-card-section>

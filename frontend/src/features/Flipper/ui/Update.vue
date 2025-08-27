@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center full-width q-mt-xs q-pb-md">
       <p class="q-mb-none text-bold text-body1">Firmware Update</p>
       <q-btn
-        v-if="fwModel.changelog.trim().length"
+        v-if="fwModel.value !== '' && fwModel.changelog.trim().length"
         @click="
           () => {
             changelogDialog = true
@@ -21,8 +21,11 @@
       <template v-if="outdated !== undefined">
         <p class="q-mb-sm">
           <span v-if="outdated">
-            Your firmware is out of date, newest release is
-            {{ getChannel('release')?.versions[0]!.version }}.
+            Your firmware is out of date
+            <template v-if="getChannel('release')?.versions?.[0]?.version">
+              , newest release is
+              {{ getChannel('release')?.versions?.[0]?.version }}.
+            </template>
           </span>
           <span v-else-if="aheadOfRelease">
             Your firmware is ahead of current release.
@@ -44,20 +47,27 @@
       </p>
       <div class="column full-width">
         <div class="flex no-wrap justify-between items-center">
-          <p class="q-mb-none">Update Channel</p>
+          <p class="q-mb-none q-mr-sm" style="min-width: 64px;">Distro:</p>
           <q-select
             v-model="fwModel"
-            :options="Object.values(fwOptions)"
+            :options="distroOptions"
             borderless
             dense
             :disable="flipperStore.flags.updateInProgress"
+            :popup-content-style="{ minWidth: '320px' }"
           >
             <!-- :style="!$q.screen.xs ? 'width: 320px;' : 'width: 290px;'" -->
             <template v-slot:selected>
-              <p class="q-mb-none" :class="`text-${fwModel.color}`">
-                {{ fwModel.label }}
-                {{ fwModel.version }}
-              </p>
+              <q-chip
+                :color="fwModel.color"
+                text-color="white"
+                dense
+                square
+                class="q-px-sm"
+              >
+                <span class="ellipsis">{{ fwModel.label }}</span>
+                <span class="q-ml-xs">{{ fwModel.version }}</span>
+              </q-chip>
             </template>
 
             <template v-slot:option="scope">
@@ -78,6 +88,20 @@
               </q-item>
             </template>
           </q-select>
+          <q-btn
+            v-if="selectedChannelRepoUrl"
+            :href="selectedChannelRepoUrl"
+            target="_blank"
+            rel="noopener"
+            flat
+            round
+            size="sm"
+            color="grey-6"
+            icon="mdi-github"
+            class="q-ml-sm"
+            :disable="flipperStore.flags.updateInProgress"
+            aria-label="Open distro repository"
+          />
         </div>
         <div class="flex center">
           <template v-if="!flipperStore.flags.updateInProgress">
@@ -88,6 +112,7 @@
               unelevated
               color="positive"
               padding="12px 30px"
+              :disable="flipperStore.flags.updateInProgress || !canInstall"
               >{{ getTextButton }}</q-btn
             >
           </template>
@@ -171,8 +196,8 @@
     </q-dialog>
 
     <q-dialog v-model="changelogDialog">
-      <q-layout view="HHH lpr FFF" container class="bg-white">
-        <q-header class="column flex-center q-py-sm bg-white text-black" reveal>
+      <q-layout view="HHH lpr FFF" container :class="$q.dark ? 'bg-dark' : 'bg-white'">
+        <q-header class="column flex-center q-py-sm" :class="$q.dark ? 'bg-dark text-white' : 'bg-white text-black'" reveal>
           <p class="q-mb-none text-h5 text-bold">What's New</p>
           <p class="q-mb-none" :class="`text-${fwModel.color}`">
             {{ fwModel.label }}
@@ -186,11 +211,11 @@
               no-html
               no-linkify
               no-typographer
-              :src="fwModel.changelog"
+              :src="fwModel.value !== '' ? fwModel.changelog : ''"
             />
           </q-page>
         </q-page-container>
-        <q-footer class="bg-transparent">
+        <q-footer :class="$q.dark ? 'bg-dark' : 'bg-transparent'">
           <q-btn
             class="full-width q-mt-sm text-pixelated text-h5"
             v-close-popup
@@ -250,36 +275,48 @@ const getChannel = (channelId: string) => {
 const isTgzCustomFile = ref(false)
 const isTargetCustomFile = ref(false)
 
-const fwOptions = ref<FlipperModel.FwOptions>({
-  release: {
-    label: 'Release',
-    selectLabel: 'Release',
-    selectDescription: 'Stable release (recommended)',
-    value: 'release',
-    version: '',
-    changelog: '',
-    color: 'positive'
-  },
-  rc: {
-    label: 'RC',
-    selectLabel: 'Release-Candidate',
-    selectDescription: 'Pre-release under testing',
-    value: 'release-candidate',
-    version: '',
-    changelog: '',
-    color: 'accent'
-  },
-  dev: {
-    label: 'Dev',
-    selectLabel: 'Development',
-    selectDescription: 'Daily unstable build, lots of bugs',
-    value: 'development',
-    version: '',
-    changelog: '',
-    color: 'negative'
-  }
+// Distro options derived from fetched channels (id starts with 'distro:')
+type DistroOption = {
+  label: string
+  selectLabel: string
+  selectDescription: string
+  value: string
+  version: string
+  changelog: string
+  color: string
+  repoUrl?: string
+}
+const distroOptions = ref<DistroOption[]>([])
+const defaultDistro: DistroOption = {
+  label: '—',
+  selectLabel: '—',
+  selectDescription: '',
+  value: '',
+  version: '',
+  changelog: '',
+  color: 'grey'
+}
+const fwModel = ref<DistroOption>(defaultDistro)
+
+// Selected channel resolved from fwModel
+const selectedChannel = computed(() => {
+  const id = fwModel.value.value
+  return id ? getChannel(id) : undefined
 })
-const fwModel = ref(fwOptions.value.release)
+const selectedChannelRepoUrl = computed<string | undefined>(() => {
+  const ch = selectedChannel.value as unknown as { repoUrl?: string } | undefined
+  return ch?.repoUrl
+})
+const canInstall = computed<boolean>(() => {
+  const ch = selectedChannel.value
+  if (!ch || !ch.versions?.length) return false
+  const files = ch.versions[0]?.files || []
+  return files.some(
+    (f) => f.type === 'update_tgz' && f.target === flipperStore.target
+  )
+})
+
+// fwModel is set dynamically from fetched distro channels
 
 const emit = defineEmits<{ (event: 'updateInProgress'): Promise<void> }>()
 
@@ -306,24 +343,24 @@ onMounted(async () => {
   })
 
   if (channels.value.length) {
-    fwOptions.value.release.version =
-      getChannel('release')?.versions[0]!.version || ''
-    fwOptions.value.rc.version =
-      getChannel('release-candidate')?.versions[0]!.version || ''
-    fwOptions.value.dev.version =
-      getChannel('development')?.versions[0]!.version || ''
+    // Build distro options from channels with id "distro:*"
+    const distros = channels.value.filter((c) => c.id.startsWith('distro:'))
+    distroOptions.value = distros.map((c: FlipperModel.Channel & { repoUrl?: string }) => ({
+      label: c.title,
+      selectLabel: c.title,
+      selectDescription: c.description,
+      value: c.id,
+      version: c.versions?.[0]?.version || '',
+      changelog: replaceGitHubLinksInMarkdown(c.versions?.[0]?.changelog || ''),
+      color: 'positive',
+      repoUrl: c.repoUrl
+    }))
+  // Default to official Kiisu distro when available; otherwise first
+  const official = distroOptions.value.find((o) => o.value === 'distro:kiisu-official')
+  if (official) fwModel.value = official
+  else if (distroOptions.value.length) fwModel.value = distroOptions.value[0]!
 
-    fwOptions.value.release.changelog = replaceGitHubLinksInMarkdown(
-      getChannel('release')?.versions[0]!.changelog || ''
-    )
-    fwOptions.value.rc.changelog = replaceGitHubLinksInMarkdown(
-      getChannel('release-candidate')?.versions[0]!.changelog || ''
-    )
-    fwOptions.value.dev.changelog = replaceGitHubLinksInMarkdown(
-      getChannel('development')?.versions[0]!.changelog || ''
-    )
-
-    const customChannel = getChannel('custom')
+  const customChannel = getChannel('custom')
     const customFile = customChannel?.versions[0]?.files.find((_file) =>
       _file.url.endsWith('tgz')
     )
@@ -344,7 +381,8 @@ onMounted(async () => {
       isTgzCustomFile.value &&
       isTargetCustomFile.value
     ) {
-      fwOptions.value.custom = {
+      // Append custom as a distro-like option
+      const customOpt: DistroOption = {
         label: customChannel.title,
         selectLabel: customChannel.title,
         selectDescription: '',
@@ -353,8 +391,8 @@ onMounted(async () => {
         changelog: '',
         color: 'dark'
       }
-
-      fwModel.value = fwOptions.value.custom
+      distroOptions.value.push(customOpt)
+      fwModel.value = customOpt
     }
   }
 
@@ -384,7 +422,7 @@ const compareVersions = () => {
       flipperStore.info.firmware.version !== 'unknown' &&
       semver.valid(flipperStore.info.firmware.version)
     ) {
-      const releaseVersion = getChannel('release')?.versions[0]!.version
+      const releaseVersion = selectedChannel.value?.versions?.[0]?.version
 
       if (releaseVersion) {
         if (semver.eq(flipperStore.info.firmware.version, releaseVersion)) {
@@ -407,6 +445,7 @@ const compareVersions = () => {
 }
 
 const getTextButton = computed(() => {
+  if (!canInstall.value) return 'unavalible'
   if (fwModel.value.version === flipperStore.info?.firmware.version) {
     return 'Reinstall'
   }
@@ -447,6 +486,13 @@ const update = async (fromFile = false) => {
   }
 
   await emit('updateInProgress')
+  if (!fromFile && !canInstall.value) {
+    updateError.value = true
+    flipperStore.onUpdateStage('end')
+    updateStage.value = 'Channel unavailable'
+    showNotif({ message: 'unavalible', color: 'negative' })
+    throw new Error(updateStage.value)
+  }
   await loadFirmware().catch((error: Error) => {
     updateError.value = true
     updateStage.value = error.message || error.toString()
@@ -704,7 +750,7 @@ const loadFirmware = async () => {
           (e: { progress: number; total: number }) => {
             if (!flipperStore.flipper?.connected) {
               throw new Error(
-                `Flipper ${flipperStore.flipper?.name} not connected`
+                `Kiisu ${flipperStore.flipper?.name} not connected`
               )
             }
 
@@ -764,7 +810,7 @@ const loadFirmware = async () => {
         )
       })
 
-    updateStage.value = 'Update in progress, pay attention to your Flipper'
+  updateStage.value = 'Update in progress, pay attention to your Kiisu'
 
     await flipperStore.flipper
       ?.RPC('systemReboot', { mode: 'UPDATE' })

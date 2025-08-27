@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-transparent text-black q-pa-lg">
+  <q-header class="bg-transparent q-pa-lg" :class="$q.dark ? 'text-white' : 'text-black'">
     <q-toolbar class="row justify-end items-center q-pa-none">
       <div>
         <q-btn
@@ -14,21 +14,20 @@
         </q-btn>
         <q-icon v-else class="q-mr-md" name="flipper:apps" size="56px" />
       </div>
-      <h4 class="q-ma-none text-h4">Apps</h4>
+  <h4 class="q-ma-none text-h4 jersey-15-regular">Apps</h4>
       <q-space />
       <div
         v-if="globalStore.isOnline"
         class="column relative-position justify-center"
       >
         <q-input
-          class="q-mr-md text-black"
+          class="q-mr-md"
           style="width: 300px"
           v-model.trim="searchText"
-          input-class="text-black"
-          bg-color="grey-3"
+          :bg-color="$q.dark ? 'grey-10' : 'grey-3'"
           rounded
           dense
-          standout="no-shadow text-black"
+          standout="no-shadow"
           type="text"
           label="Search"
           debounce="400"
@@ -44,7 +43,7 @@
         <q-list
           v-if="searchText.length >= 2"
           bordered
-          class="absolute bg-white rounded-borders z-top"
+          :class="['absolute', 'rounded-borders', 'z-top', $q.dark ? 'bg-grey-10' : 'bg-white']"
           style="width: 270px; top: 43px"
         >
           <template v-if="searchResult.length">
@@ -79,7 +78,7 @@
         flat
         rounded
         no-caps
-        :color="$route.name === 'InstalledApps' ? 'primary' : 'black'"
+        :color="$route.name === 'InstalledApps' ? 'primary' : ($q.dark ? 'white' : 'black')"
         icon="flipper:installed"
         label="Installed"
         :to="{ name: 'InstalledApps' }"
@@ -101,7 +100,7 @@
         flat
         rounded
         no-caps
-        color="black"
+        :color="$q.dark ? 'white' : 'black'"
         icon="mdi-github"
         label="Contribute"
         href="https://github.com/flipperdevices/flipper-application-catalog"

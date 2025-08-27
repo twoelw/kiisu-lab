@@ -40,7 +40,7 @@
                   flipperStore.flags.flipperIsInitialized
                 "
               >
-                <Loading label="Flipper is initialized..." />
+                <Loading label="Kiisu is initialized..." />
               </template>
               <template v-else-if="flipperStore.availableDfuFlippers.length">
                 <q-list class="q-gutter-y-md full-width">
@@ -68,7 +68,7 @@
                   width="70px"
                   no-spinner
                 />
-                <div class="text-h6 q-my-sm">Flipper not connected</div>
+                <div class="text-h6 q-my-sm">Kiisu not connected</div>
               </template>
             </q-card-section>
           </q-card>
@@ -96,10 +96,10 @@
       >
         <template v-slot:description>
           <template v-if="flipperStore.isElectron">
-            <p>Plug in your Flipper and and wait for initialization</p>
+            <p>Plug in your Kiisu and and wait for initialization</p>
           </template>
           <template v-else>
-            <p>Plug in your Flipper and click the button below</p>
+            <p>Plug in your Kiisu and click the button below</p>
           </template>
         </template>
         <template v-slot:default>

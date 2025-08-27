@@ -1,6 +1,6 @@
 .controls {
   &__dpad {
-    border: 2px solid #ff9722;
+  border: 2px solid $primary;
     width: 168px;
     height: 168px;
     border-radius: calc(168px / 2);
@@ -17,7 +17,7 @@ $transforms: (
 );
 
 #{$dpad} {
-  background-color: #491d00;
+  background-color: rgba($primary, 0.15);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -41,17 +41,18 @@ $transforms: (
 
 .expandView {
   &__wrapper {
-    background: linear-gradient(180deg, #090400, #210f00);
+  // Solid black base with a subtle purple gradient overlay on top
+  background: linear-gradient(180deg, rgba($primary, 0.08), rgba($primary, 0.22)), #000;
   }
 }
 
 .scanLine {
   background: linear-gradient(
     to bottom,
-    rgba(254, 138, 44, 0) 0%,
-    rgba(254, 138, 44, 0.01) 60%,
-    rgba(254, 138, 44, 0.07) 99%,
-    rgba(254, 138, 44, 0) 100%
+    rgba($primary, 0) 0%,
+    rgba($primary, 0.08) 60%,
+    rgba($primary, 0.2) 99%,
+    rgba($primary, 0) 100%
   );
   background-size: 100% 320px;
   background-repeat: no-repeat;

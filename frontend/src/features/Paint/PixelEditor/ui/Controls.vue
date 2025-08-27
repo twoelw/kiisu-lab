@@ -1,5 +1,5 @@
 <template>
-  <div v-if="pe" class="controls q-pa-xs rounded-borders bg-grey-2">
+  <div v-if="pe" class="controls q-pa-xs rounded-borders" :class="$q.dark ? 'bg-grey-9' : 'bg-grey-2'">
     <q-btn-toggle
       v-model="modeModel"
       flat
@@ -73,7 +73,7 @@
     <q-btn
       flat
       dense
-      :color="paintStore.flags.checkerboard ? 'primary' : 'black'"
+      :color="paintStore.flags.checkerboard ? 'primary' : ($q.dark ? 'white' : 'black')"
       icon="mdi-checkerboard"
       class="q-px-sm"
       @click="paintStore.flags.checkerboard = !paintStore.flags.checkerboard"

@@ -2,14 +2,14 @@
   <q-page class="column items-start" padding>
     <q-toolbar class="row justify-end items-center q-pa-none q-mb-md">
       <q-icon class="q-mr-md" :name="props.icon" size="42px" />
-      <h4 class="q-ma-none text-h4">{{ props.title }}</h4>
+  <h4 class="q-ma-none text-h4 jersey-15-regular">{{ props.title }}</h4>
       <q-space />
       <q-btn
         v-if="slots.info"
         class="text-weight-regular"
         flat
         no-caps
-        color="black"
+        :color="$q.dark ? 'white' : 'black'"
         icon="mdi-information-outline"
         label="Learn more"
         @click="infoDialog = true"

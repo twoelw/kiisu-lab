@@ -67,35 +67,28 @@ const extLinks = [
   {
     title: 'Home',
     icon: 'mdi-home-outline',
-    link: 'https://flipperzero.one/',
+    link: 'https://kiisu.io/',
     blank: true,
     router: false
   },
   {
     title: 'Shop',
     icon: 'mdi-cart-outline',
-    link: 'https://shop.flipperzero.one/',
+    link: 'https://store.rainwalker.ee/collections/all',
     blank: true,
     router: false
   },
   {
     title: 'Docs',
     icon: 'mdi-book-open-variant',
-    link: 'https://docs.flipperzero.one/',
+    link: 'https://docs.flipper.net/',
     blank: true,
     router: false
   },
   {
-    title: 'Blog',
-    icon: 'mdi-newspaper-variant-outline',
-    link: 'https://blog.flipperzero.one/',
-    blank: true,
-    router: false
-  },
-  {
-    title: 'Forum',
-    icon: 'mdi-forum-outline',
-    link: 'https://forum.flipperzero.one/',
+    title: 'GitHub',
+    icon: 'mdi-github',
+    link: 'https://github.com/kiisu-io',
     blank: true,
     router: false
   }

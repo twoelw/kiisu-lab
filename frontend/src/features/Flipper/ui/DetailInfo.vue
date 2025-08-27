@@ -147,7 +147,7 @@ const isDetailRegion = (
 const fullInfo = computed(() => {
   return [
     {
-      title: 'Flipper Device',
+  title: 'Kiisu Device',
       values: [
         createValue('Device Name', hardware.value?.name),
         createValue('Hardware Model', hardware.value?.model),

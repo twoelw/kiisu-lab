@@ -14,13 +14,13 @@
         :disabled="fullPath === '/'"
         @click="itemClicked({ name: '..' })"
       />
-      <q-breadcrumbs class="col q-mx-md" active-color="black" gutter="xs">
+  <q-breadcrumbs class="col q-mx-md text-black" :active-color="$q.dark ? 'white' : 'black'" gutter="xs">
         <template v-slot:separator>
           <q-icon size="1.4em" name="chevron_right" />
         </template>
         <template v-for="(item, index) in pathList" :key="index">
           <q-breadcrumbs-el
-            class="toolbar__breadcrumb justify-center"
+            class="toolbar__breadcrumb justify-center text-black"
             :class="{ 'cursor-pointer': item.path !== fullPath }"
             :label="item.name"
             :icon="item.icon"
@@ -106,7 +106,7 @@
             <q-item-label class="ellipsis">{{ item.name }}</q-item-label>
             <q-item-label class="ellipsis" caption>
               <span v-if="fullPath === '/' && item.name === 'int'"
-                >Flipper internal storage</span
+                >Kiisu internal storage</span
               >
               <span v-if="fullPath === '/' && item.name === 'ext'"
                 >SD card</span

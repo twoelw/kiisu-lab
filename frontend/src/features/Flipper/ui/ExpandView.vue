@@ -9,13 +9,13 @@
       <canvas
         ref="gridBackground"
         class="absolute-center"
-        style="opacity: 0.15"
+  style="opacity: 0.2"
       />
       <q-card-section class="row col items-center justify-center q-pa-xl">
         <div class="row justify-center items-center">
           <div
             class="relative-position bg-primary q-pa-sm rounded-borders q-mr-lg"
-            style="border: 3px solid #9e5823"
+            style="border: 3px solid var(--q-primary)"
           >
             <canvas
               :width="128 * screenScale"
@@ -211,7 +211,7 @@
               anchor="bottom right"
               self="top right"
               :offset="[16, 20]"
-              style="border: 1px solid #662c00; background: #210f00"
+              style="border: 1px solid var(--q-primary); background: rgba(126, 87, 194, 0.2)"
             >
               <q-icon
                 name="flipper:steaming-help-mac"
@@ -308,7 +308,7 @@ const saveImage = (isClipboard = false) => {
             await navigator.clipboard.write([clipboardItem])
 
             showNotif({
-              message: 'Flipper screen copied to clipboard',
+              message: 'Kiisu screen copied to clipboard',
               color: 'info',
               timeout: 500
             })
@@ -340,7 +340,7 @@ const resizeCanvas = () => {
     const ctx = gridBackground.value.getContext('2d')
 
     if (ctx) {
-      ctx.strokeStyle = '#aa5115'
+  ctx.strokeStyle = '#7e57c2'
       ctx.lineWidth = 2
 
       for (let yPos = cellSize; yPos < height; yPos += cellSize) {

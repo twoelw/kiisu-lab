@@ -14,7 +14,7 @@
         <q-icon name="mdi-alert-circle" color="primary" size="64px" />
         <div class="text-h6 q-my-sm">Apps don't work in mobile browsers</div>
         <p>
-          Mobile browsers can't connect to Flipper, meaning you won't be able to
+          Mobile browsers can't connect to Kiisu, meaning you won't be able to
           install apps.
         </p>
         <p>Get the official mobile app – it has the same features!</p>
